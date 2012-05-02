@@ -1,11 +1,6 @@
 //
 //  MRXMLReader.m
-//  Markable
-//
-//  Created by Zachary Waldowski on 1/2/12.
-//  Copyright (c) 2012 Dizzy Technology. All rights reserved.
-//
-//  Based on code by Troy Brant. Copyright 2010. All rights reserved.
+//  MRWebDAVClient
 //
 
 #import "MRXMLReader.h"

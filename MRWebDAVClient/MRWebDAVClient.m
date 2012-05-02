@@ -1,9 +1,6 @@
 //
 //  MRWebDAVClient.m
-//  Markable
-//
-//  Created by Zachary Waldowski on 1/2/12.
-//  Copyright (c) 2012 Dizzy Technology. All rights reserved.
+//  MRWebDAVClient
 //
 
 #import "MRWebDAVClient.h"

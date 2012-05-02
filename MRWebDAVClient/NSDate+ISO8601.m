@@ -1,15 +1,12 @@
 //
-//  NSDate+SSToolkitAdditions.m
-//  SSToolkit
-//
-//  Created by Sam Soffes on 5/26/10.
-//  Copyright 2010-2011 Sam Soffes. All rights reserved.
+//  NSDate+ISO8601.m
+//  MRWebDAVClient
 //
 
 #import "NSDate+ISO8601.h"
 #include <time.h>
 
-@implementation NSDate (SSToolkitAdditions)
+@implementation NSDate (ISO8601)
 
 + (NSDate *)dateFromISO8601String:(NSString *)iso8601String {
 	if (!iso8601String) {

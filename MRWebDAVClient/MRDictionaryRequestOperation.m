@@ -1,9 +1,6 @@
 //
 //  MRDictionaryRequestOperation.m
-//  Markable
-//
-//  Created by Zachary Waldowski on 1/27/12.
-//  Copyright (c) 2012 Dizzy Technology. All rights reserved.
+//  MRWebDAVClient
 //
 
 #import "MRDictionaryRequestOperation.h"

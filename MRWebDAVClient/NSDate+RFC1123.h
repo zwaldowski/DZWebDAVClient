@@ -1,15 +1,22 @@
 //
 //  NSDate+RFC1123.h
+//  MRWebDAVClient
 //
-//  Created by Marcus Rohrmoser on 19.08.09.
+//  Created by Zachary Waldowski on 1/2/12.
+//  Copyright (c) 2012 Dizzy Technology. All rights reserved.
 //
-//  Category on NSDate to add rfc1123 dates.
-//  http://blog.mro.name/2009/08/nsdateformatter-http-header/ and
-//  http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1
+//  Based on code by Marcus Rohrmoser. Copyright 2009. All rights reserved.
+//
+//  Licensed under MIT. See LICENSE.
 //
 
 #import <Foundation/Foundation.h>
 
+/**
+ * Provides extensions to `NSDate` for representing RFC1123-formatted strings.
+ * 
+ * Based on the [W3 specification](http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1) and ["NSDateFormatter & HTTP Header"](http://blog.mro.name/2009/08/nsdateformatter-http-header/).
+ */
 @interface NSDate (RFC1123)
 
 /**

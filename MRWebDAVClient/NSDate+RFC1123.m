@@ -1,11 +1,6 @@
 //
-//  NSDate+RFC1123.m
-//
-//  Created by Marcus Rohrmoser on 19.08.09.
-//
-//  Category on NSDate to add rfc1123 dates.
-//  http://blog.mro.name/2009/08/nsdateformatter-http-header/ and
-//  http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1
+//  NSDate+RFC1123.h
+//  MRWebDAVClient
 //
 
 #import "NSDate+RFC1123.h"

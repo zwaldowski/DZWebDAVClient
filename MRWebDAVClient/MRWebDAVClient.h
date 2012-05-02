@@ -1,9 +1,11 @@
 //
 //  MRWebDAVClient.h
-//  Markable
+//  MRWebDAVClient
 //
-//  Created by Zachary Waldowski on 1/2/12.
+//  Created by Zachary Waldowski on 1/27/12.
 //  Copyright (c) 2012 Dizzy Technology. All rights reserved.
+//
+//  Licensed under MIT. See LICENSE.
 //
 
 #import "AFHTTPClient.h"
