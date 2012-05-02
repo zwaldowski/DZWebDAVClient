@@ -1,6 +1,6 @@
 //
-//  MRXMLReader.h
-//  MRWebDAVClient
+//  DZXMLReader.h
+//  DZWebDAVClient
 //
 //  Created by Zachary Waldowski on 1/2/12.
 //  Copyright (c) 2012 Dizzy Technology. All rights reserved.
@@ -13,7 +13,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MRXMLReader : NSObject
+@interface DZXMLReader : NSObject
 
 + (NSDictionary *)dictionaryForXMLData:(NSData *)data error:(NSError **)error;
 + (NSDictionary *)dictionaryForXMLString:(NSString *)string error:(NSError **)error;

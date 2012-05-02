@@ -1,6 +1,6 @@
 //
 //  NSDate+RFC1123.h
-//  MRWebDAVClient
+//  DZWebDAVClient
 //
 
 #import "NSDate+RFC1123.h"

@@ -1,33 +1,33 @@
 //
-//  MRWebDAVClient.m
-//  MRWebDAVClient
+//  DZWebDAVClient.m
+//  DZWebDAVClient
 //
 
-#import "MRWebDAVClient.h"
-#import "MRDictionaryRequestOperation.h"
+#import "DZWebDAVClient.h"
+#import "DZDictionaryRequestOperation.h"
 #import "NSDate+RFC1123.h"
 #import "NSDate+ISO8601.h"
 
-NSString const *MRWebDAVContentTypeKey		= @"getcontenttype";
-NSString const *MRWebDAVETagKey				= @"getetag";
-NSString const *MRWebDAVCTagKey				= @"getctag";
-NSString const *MRWebDAVCreationDateKey		= @"creationdate";
-NSString const *MRWebDAVModificationDateKey	= @"modificationdate";
+NSString const *DZWebDAVContentTypeKey		= @"getcontenttype";
+NSString const *DZWebDAVETagKey				= @"getetag";
+NSString const *DZWebDAVCTagKey				= @"getctag";
+NSString const *DZWebDAVCreationDateKey		= @"creationdate";
+NSString const *DZWebDAVModificationDateKey	= @"modificationdate";
 
-@interface MRWebDAVClient()
+@interface DZWebDAVClient()
 - (void)mr_listPath:(NSString *)path depth:(NSUInteger)depth success:(void(^)(AFHTTPRequestOperation *, id))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure;
 
 @property (nonatomic, strong) NSFileManager *fileManager;
 @end
 
-@implementation MRWebDAVClient
+@implementation DZWebDAVClient
 
 @synthesize fileManager = _fileManager;
 
 - (id)initWithBaseURL:(NSURL *)url {
     if ((self = [super initWithBaseURL:url])) {
 		self.fileManager = [NSFileManager new];
-        [self registerHTTPOperationClass:[MRDictionaryRequestOperation class]];
+        [self registerHTTPOperationClass: [DZDictionaryRequestOperation class]];
     }
     return self;
 }
@@ -119,17 +119,17 @@ NSString const *MRWebDAVModificationDateKey	= @"modificationdate";
 			// reformat the response dictionaries into usable values
 			NSMutableDictionary *object = [NSMutableDictionary dictionaryWithCapacity: 5];
 			
-			NSString *origCreationDate = [unformatted objectForKey: MRWebDAVCreationDateKey];
+			NSString *origCreationDate = [unformatted objectForKey: DZWebDAVCreationDateKey];
             NSDate *creationDate = [NSDate dateFromRFC1123String: origCreationDate] ?: [NSDate dateFromISO8601String: origCreationDate] ?: nil;
 			
-			NSString *origModificationDate = [unformatted objectForKey: MRWebDAVModificationDateKey] ?: [unformatted objectForKey: @"getlastmodified"];
+			NSString *origModificationDate = [unformatted objectForKey: DZWebDAVModificationDateKey] ?: [unformatted objectForKey: @"getlastmodified"];
 			NSDate *modificationDate = [NSDate dateFromRFC1123String: origModificationDate] ?: [NSDate dateFromISO8601String: origModificationDate] ?: nil;
 			
-			[object setObject: [unformatted objectForKey: MRWebDAVETagKey] forKey: MRWebDAVETagKey];
-			[object setObject: [unformatted objectForKey: MRWebDAVCTagKey] forKey: MRWebDAVCTagKey];
-			[object setObject: [unformatted objectForKey: MRWebDAVContentTypeKey] ?: [unformatted objectForKey: @"contenttype"] forKey: MRWebDAVContentTypeKey];
-            [object setObject: creationDate forKey: MRWebDAVCreationDateKey];
-			[object setObject: modificationDate forKey: MRWebDAVModificationDateKey];
+			[object setObject: [unformatted objectForKey: DZWebDAVETagKey] forKey: DZWebDAVETagKey];
+			[object setObject: [unformatted objectForKey: DZWebDAVCTagKey] forKey: DZWebDAVCTagKey];
+			[object setObject: [unformatted objectForKey: DZWebDAVContentTypeKey] ?: [unformatted objectForKey: @"contenttype"] forKey: DZWebDAVContentTypeKey];
+            [object setObject: creationDate forKey: DZWebDAVCreationDateKey];
+			[object setObject: modificationDate forKey: DZWebDAVModificationDateKey];
 			
 			[dict setObject: object forKey: key];
 		}];

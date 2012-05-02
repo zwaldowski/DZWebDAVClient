@@ -1,13 +1,13 @@
 //
-//  MRXMLReader.m
-//  MRWebDAVClient
+//  DZXMLReader.m
+//  DZWebDAVClient
 //
 
-#import "MRXMLReader.h"
+#import "DZXMLReader.h"
 
 NSString *const kXMLReaderTextNodeKey = @"text";
 
-@interface MRXMLReader () <NSXMLParserDelegate>
+@interface DZXMLReader () <NSXMLParserDelegate>
 
 @property (nonatomic, strong) NSXMLParser *parser;
 @property (nonatomic, strong) NSMutableArray *dictionaryStack;
@@ -15,7 +15,7 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 
 @end
 
-@implementation MRXMLReader
+@implementation DZXMLReader
 
 @synthesize parser = _parser, dictionaryStack = _dictionaryStack, textInProgress = _textInProgress, error = _error, dictionary = _dictionary;
 
@@ -28,21 +28,21 @@ NSString *const kXMLReaderTextNodeKey = @"text";
 
 + (NSDictionary *)dictionaryForXMLString:(NSString *)string error:(NSError **)error {
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
-    return [MRXMLReader dictionaryForXMLData:data error:error];
+    return [DZXMLReader dictionaryForXMLData:data error:error];
 }
 
 + (NSDictionary *)dictionaryForXMLFileAtPath:(NSString *)path error:(NSError **)error {
     NSData *data = [NSData dataWithContentsOfFile:path options:0 error:error];
-    return [MRXMLReader dictionaryForXMLData:data error:error];
+    return [DZXMLReader dictionaryForXMLData:data error:error];
 }
 
 + (NSDictionary *)dictionaryForXMLFileAtURL:(NSURL *)URL error:(NSError **)error {
 	NSData *data = [NSData dataWithContentsOfURL:URL options:0 error:error];
-    return [MRXMLReader dictionaryForXMLData:data error:error];
+    return [DZXMLReader dictionaryForXMLData:data error:error];
 }
 
 + (NSDictionary *)dictionaryForXMLParser:(NSXMLParser *)parser error:(NSError **)error {
-    MRXMLReader *reader = [[MRXMLReader alloc] initWithParser: parser];
+    DZXMLReader *reader = [[DZXMLReader alloc] initWithParser: parser];
 	BOOL success = [reader parse];
 	if (success)
 		return reader.dictionary;

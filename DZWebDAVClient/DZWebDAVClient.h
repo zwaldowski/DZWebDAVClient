@@ -1,6 +1,6 @@
 //
-//  MRWebDAVClient.h
-//  MRWebDAVClient
+//  DZWebDAVClient.h
+//  DZWebDAVClient
 //
 //  Created by Zachary Waldowski on 1/27/12.
 //  Copyright (c) 2012 Dizzy Technology. All rights reserved.
@@ -11,21 +11,21 @@
 #import "AFHTTPClient.h"
 
 /** The key for a uniform (MIME) type identifier returned from the property request methods. */
-extern NSString *MRWebDAVContentTypeKey;
+extern NSString *DZWebDAVContentTypeKey;
 
 /** The key for a unique entity identifier returned from the property request methods. */
-extern NSString *MRWebDAVETagKey;
+extern NSString *DZWebDAVETagKey;
 
 /** The key for a content identifier tag returned from the property request methods. This is only supported on some servers, and usually defines whether the contents of a collection (folder) have changed. */
-extern NSString *MRWebDAVCTagKey;
+extern NSString *DZWebDAVCTagKey;
 
 /** The key for the creation date of an entity. */
-extern NSString *MRWebDAVCreationDateKey;
+extern NSString *DZWebDAVCreationDateKey;
 
 /** The key for last modification date of an entity. */
-extern NSString *MRWebDAVModificationDateKey;
+extern NSString *DZWebDAVModificationDateKey;
 
-@interface MRWebDAVClient : AFHTTPClient
+@interface DZWebDAVClient : AFHTTPClient
 
 /**
  Enqueues an operation to copy the object at a path to another path using a `COPY` request.

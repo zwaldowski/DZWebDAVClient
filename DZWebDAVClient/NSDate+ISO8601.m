@@ -1,6 +1,6 @@
 //
 //  NSDate+ISO8601.m
-//  MRWebDAVClient
+//  DZWebDAVClient
 //
 
 #import "NSDate+ISO8601.h"

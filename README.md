@@ -1,6 +1,6 @@
-MRWebDAVClient
+DZWebDAVClient
 ==============
-MRWebDAVClient is a drop-dead simple WebDAV client based on [AFNetworking](https://github.com/AFNetworking/AFNetworking/). It requires ARC and, therefore, iOS 4.3 or better.
+DZWebDAVClient is a drop-dead simple WebDAV client based on [AFNetworking](https://github.com/AFNetworking/AFNetworking/). It requires ARC and, therefore, iOS 4.3 or better.
 
 Component Parts
 ---------------

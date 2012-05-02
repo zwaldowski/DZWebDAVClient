@@ -1,6 +1,6 @@
 //
 //  NSDate+ISO8601.h
-//  MRWebDAVClient
+//  DZWebDAVClient
 //
 //  Created by Zachary Waldowski on 1/2/12.
 //  Copyright (c) 2012 Dizzy Technology. All rights reserved.
