@@ -43,11 +43,11 @@ static NSDateFormatter *ASCTimeFormatter(void) {
 
 @implementation NSDate (RFC1123)
 
-+ (NSDate *)dateFromRFC1123String:(NSString *)value_ {
-    if(value_ == nil)
++ (NSDate *)dateFromRFC1123String:(NSString *)value {
+    if (!value.length)
         return nil;
 	
-	return [RFC1123Formatter() dateFromString:value_] ?: [RFC850Formatter() dateFromString:value_] ?: [ASCTimeFormatter() dateFromString:value_];
+	return [RFC1123Formatter() dateFromString: value] ?: [RFC850Formatter() dateFromString: value] ?: [ASCTimeFormatter() dateFromString: value];
 }
 
 - (NSString *)RFC1123String {
