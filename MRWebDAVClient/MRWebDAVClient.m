@@ -15,6 +15,8 @@ NSString const *MRWebDAVCreationDateKey		= @"creationdate";
 NSString const *MRWebDAVModificationDateKey	= @"modificationdate";
 
 @interface MRWebDAVClient()
+- (void)mr_listPath:(NSString *)path depth:(NSUInteger)depth success:(void(^)(AFHTTPRequestOperation *, id))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure;
+
 @property (nonatomic, strong) NSFileManager *fileManager;
 @end
 
@@ -81,14 +83,17 @@ NSString const *MRWebDAVModificationDateKey	= @"modificationdate";
 	[self enqueueBatchOfHTTPRequestOperationsWithRequests:requests progressBlock:progressBlock completionBlock:completionBlock];
 }
 
-- (void)listPath:(NSString *)path success:(void(^)(AFHTTPRequestOperation *, id))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure {
-	[self listPath:path depth:1 success:success failure:failure];
-}
-
-- (void)listPath:(NSString *)path depth:(NSUInteger)depth success:(void(^)(AFHTTPRequestOperation *, id))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure {
+- (void)mr_listPath:(NSString *)path depth:(NSUInteger)depth success:(void(^)(AFHTTPRequestOperation *, id))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure {
 	NSParameterAssert(success);
 	NSMutableURLRequest *request = [self requestWithMethod:@"PROPFIND" path:path parameters:nil];
-    [request setValue:depth <= 1 ? [NSString stringWithFormat:@"%u", depth] : @"infinity" forHTTPHeaderField:@"Depth"];
+	NSString *depthHeader = nil;
+	if (depth <= 0)
+		depthHeader = @"0";
+	else if (depth == 1)
+		depthHeader = @"1";
+	else
+		depthHeader = @"infinity";
+    [request setValue: depthHeader forHTTPHeaderField: @"Depth"];
     [request setHTTPBody:[@"<?xml version=\"1.0\" encoding=\"utf-8\" ?><D:propfind xmlns:D=\"DAV:\"><D:allprop/></D:propfind>" dataUsingEncoding:NSUTF8StringEncoding]];
     [request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -96,7 +101,7 @@ NSString const *MRWebDAVModificationDateKey	= @"modificationdate";
         id checkHrefs = [responseObject valueForKeyPath:@"multistatus.response.href"];
 		
 		NSArray *objects = [checkItems isKindOfClass:[NSArray class]] ? checkItems : @[ checkItems ],
-				*keys = [checkHrefs isKindOfClass:[NSArray class]] ? checkHrefs : @[ checkHrefs ];
+		*keys = [checkHrefs isKindOfClass:[NSArray class]] ? checkHrefs : @[ checkHrefs ];
 		
 		NSDictionary *unformattedDict = [NSDictionary dictionaryWithObjects: objects forKeys: keys];
 		NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity: unformattedDict.count];
@@ -135,8 +140,16 @@ NSString const *MRWebDAVModificationDateKey	= @"modificationdate";
 	[self enqueueHTTPRequestOperation:operation];
 }
 
+- (void)propertiesOfPath:(NSString *)path success:(void(^)(AFHTTPRequestOperation *, id ))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure {
+	[self mr_listPath:path depth:0 success:success failure:failure];
+}
+
+- (void)listPath:(NSString *)path success:(void(^)(AFHTTPRequestOperation *, id))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure {
+	[self mr_listPath:path depth:1 success:success failure:failure];
+}
+
 - (void)recursiveListPath:(NSString *)path success:(void(^)(AFHTTPRequestOperation *, id))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure {
-	[self listPath:path depth:3 success:success failure:failure];
+	[self mr_listPath:path depth:2 success:success failure:failure];
 }
 
 - (void)downloadPath:(NSString *)remoteSource toURL:(NSURL *)localDestination success:(void(^)(void))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure {
