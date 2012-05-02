@@ -16,7 +16,6 @@ static dispatch_queue_t xml_request_operation_processing_queue() {
 }
 
 @interface MRDictionaryRequestOperation ()
-@property (readwrite, nonatomic, strong) NSDictionary *responseDictionary;
 @property (readwrite, nonatomic, strong) NSError *parseError;
 @end
 
@@ -27,8 +26,8 @@ static dispatch_queue_t xml_request_operation_processing_queue() {
 - (NSDictionary *)responseDictionary {
 	if (!_responseDictionary && self.responseData.length && self.isFinished) {
 		NSError *error = nil;
-		self.responseDictionary = [MRXMLReader dictionaryForXMLParser:self.responseXMLParser error:&error];		
-		self.parseError = error;
+		_responseDictionary = [MRXMLReader dictionaryForXMLParser: self.responseXMLParser error: &error];
+		_parseError = error;
 	}
 	return _responseDictionary;
 }
@@ -73,6 +72,12 @@ static dispatch_queue_t xml_request_operation_processing_queue() {
     };    
 }
 
-
++ (MRDictionaryRequestOperation *)dictionaryRequestOperationWithRequest:(NSURLRequest *)urlRequest
+																success:(void (^)(AFHTTPRequestOperation *operation,  NSDictionary *responseObject))success
+																failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+	MRDictionaryRequestOperation *requestOperation = [[self alloc] initWithRequest:urlRequest];
+	[requestOperation setCompletionBlockWithSuccess: success failure: failure];
+    return requestOperation;
+}
 
 @end
