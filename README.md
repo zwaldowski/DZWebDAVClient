@@ -1,4 +1,21 @@
 MRWebDAVClient
 ==============
+MRWebDAVClient is a drop-dead simple WebDAV client based on [AFNetworking](https://github.com/AFNetworking/AFNetworking/). It requires ARC and, therefore, iOS 4.3 or better.
 
-An Objective-C WebDAV client based on AFNetworking.
+Component Parts
+---------------
+
+* XML parsing to `NSDictionary` includes code by [Troy Brant](http://troybrant.net/blog/2010/09/simple-xml-to-nsdictionary-converter/).
+* [RFC1123](http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1) date parsing includes code by [Marcus Rohrmoser](http://blog.mro.name/2009/08/nsdateformatter-http-header/).
+* ISO8601 date parsing includes code by [Sam Soffes](https://github.com/samsoffes/sstoolkit/blob/master/SSToolkit/NSDate%2BSSToolkitAdditions.m).
+
+License
+-------
+
+Copyright (c) 2012 Zachary Waldowski, [Troy Brant](http://troybrant.net/), [Marcus Rohrmoser](http://blog.mro.name), and [Sam Soffes](http://sstoolk.it/).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
