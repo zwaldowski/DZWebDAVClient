@@ -7,6 +7,7 @@
 #import "DZDictionaryRequestOperation.h"
 #import "NSDate+RFC1123.h"
 #import "NSDate+ISO8601.h"
+#import "DZWebDAVLock.h"
 
 NSString const *DZWebDAVContentTypeKey		= @"getcontenttype";
 NSString const *DZWebDAVETagKey				= @"getetag";
@@ -203,6 +204,40 @@ NSString const *DZWebDAVModificationDateKey	= @"modificationdate";
 	[request setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
 	AFHTTPRequestOperation *operation = [self mr_operationWithRequest:request success:success failure:failure];
 	operation.inputStream = [NSInputStream inputStreamWithURL:localSource];
+    [self enqueueHTTPRequestOperation:operation];
+}
+
+- (void)lockPath:(NSString *)path exclusive:(BOOL)exclusive recursive:(BOOL)recursive timeout:(NSTimeInterval)timeout success:(void(^)(AFHTTPRequestOperation *operation, DZWebDAVLock *lock))success failure:(void(^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    NSParameterAssert(success);
+    NSMutableURLRequest *request = [self requestWithMethod: @"LOCK" path: path parameters: nil];
+    [request setValue: @"application/xml" forHTTPHeaderField: @"Content-Type"];
+    [request setValue: timeout ? [NSString stringWithFormat: @"Second-%f", timeout] : @"Infinite, Second-4100000000" forHTTPHeaderField: @"Timeout"];
+	[request setValue: recursive ? @"Infinity" : @"0" forHTTPHeaderField: @"Depth"];
+    NSString *bodyData = [NSString stringWithFormat: @"<?xml version=\"1.0\" encoding=\"utf-8\"?><D:lockinfo xmlns:D=\"DAV:\"><D:lockscope><D:%@/></D:lockscope><D:locktype><D:write/></D:locktype></D:lockinfo>", exclusive ? @"exclusive" : @"shared"];
+    [request setHTTPBody: [bodyData dataUsingEncoding:NSUTF8StringEncoding]];
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest: request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(operation, [[DZWebDAVLock alloc] initWithURL: operation.request.URL responseObject: responseObject]);
+    } failure: failure];
+    [self enqueueHTTPRequestOperation: operation];
+}
+
+- (void)refreshLock:(DZWebDAVLock *)lock success:(void(^)(AFHTTPRequestOperation *operation, DZWebDAVLock *lock))success failure:(void(^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    NSMutableURLRequest *request = [self requestWithMethod: @"LOCK" path: lock.URL.path parameters: nil];
+    [request setValue: [NSString stringWithFormat:@"(<%@>)", lock.token] forHTTPHeaderField: @"If"];
+    [request setValue: lock.timeout ? [NSString stringWithFormat: @"Second-%f", lock.timeout] : @"Infinite, Second-4100000000" forHTTPHeaderField: @"Timeout"];
+	[request setValue: lock.recursive ? @"Infinity" : @"0" forHTTPHeaderField: @"Depth"];
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest: request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [lock updateFromResponseObject: responseObject];
+        success(operation, lock);
+    } failure: failure];
+    [self enqueueHTTPRequestOperation: operation];
+}
+
+- (void)unlock:(DZWebDAVLock *)lock success:(void(^)(void))success failure:(void(^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    NSMutableURLRequest *request = [self requestWithMethod: @"UNLOCK" path: lock.URL.path parameters: nil];
+	[request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:[NSString stringWithFormat:@"<%@>", lock.token] forHTTPHeaderField:@"Lock-Token"];
+    AFHTTPRequestOperation *operation = [self mr_operationWithRequest:request success:success failure:failure];
     [self enqueueHTTPRequestOperation:operation];
 }
 

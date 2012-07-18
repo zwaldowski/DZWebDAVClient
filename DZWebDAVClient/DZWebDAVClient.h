@@ -25,6 +25,8 @@ extern NSString *DZWebDAVCreationDateKey;
 /** The key for last modification date of an entity. */
 extern NSString *DZWebDAVModificationDateKey;
 
+@class DZWebDAVLock;
+
 @interface DZWebDAVClient : AFHTTPClient
 
 /**
@@ -211,5 +213,57 @@ extern NSString *DZWebDAVModificationDateKey;
 		  path:(NSString *)remoteDestination
 	   success:(void(^)(void))success
 	   failure:(void(^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+/**
+ Enqueues an operation to lock the collection or file
+ at a remote path using a `LOCK` request.
+ 
+ @param path A remote path, relative to the HTTP client's base URL, to lock.
+ @param exclusive If YES, other clients will be prevented accessing the same content.
+ @param recursive If YES, the contents of a collection will be locked as well.
+ @param timeout If provided, the lock will expire after the given number of seconds.
+ If the timeout is 0, the lock will be infinite, or for 130 years, whichever the server honors.
+ @param success A block callback, to be fired upon successful completion, with two arguments: the request operation and an object representing the achieved lock.
+ @param failure A block callback, to be fired upon the failure of either the request or the parsing of the request's data, with two arguments: the request operation and the network or parsing error that occurred.
+ 
+ @see refreshLock:success:failure:
+ @see unlock:success:failure:
+ */
+- (void)lockPath:(NSString *)path
+       exclusive:(BOOL)exclusive
+       recursive:(BOOL)recursive
+         timeout:(NSTimeInterval)timeout
+         success:(void(^)(AFHTTPRequestOperation *operation, DZWebDAVLock *lock))success
+         failure:(void(^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+/**
+ Enqueues an operation to re-lock a collection or file
+ at a remote path using a `LOCK` request.
+ 
+ @param lock A lock object, as returned from a successful call to lockPath:exclusive:recursive:timeout:success:failure:.
+ @param success A block callback, to be fired upon successful completion, with two arguments: the request operation and an object representing the updated lock.
+ @param failure A block callback, to be fired upon the failure of either the request or the parsing of the request's data, with two arguments: the request operation and the network or parsing error that occurred.
+ 
+ @see lockPath:exclusive:recursive:timeout:success:failure:
+ @see unlock:success:failure:
+ */
+- (void)refreshLock:(DZWebDAVLock *)lock
+            success:(void(^)(AFHTTPRequestOperation *operation, DZWebDAVLock *lock))success
+            failure:(void(^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+/**
+ Enqueues an operation to unlock a collection or file
+ at a remote path using a `UNLOCK` request.
+ 
+ @param lock A lock object, as returned from a successful call to lockPath:exclusive:recursive:timeout:success:failure:.
+ @param success A block callback, to be fired upon successful completion, with no arguments.
+ @param failure A block callback, to be fired upon the failure of either the request or the parsing of the request's data, with two arguments: the request operation and the network or parsing error that occurred.
+ 
+ @see lockPath:exclusive:recursive:timeout:success:failure:
+ @see refreshLock:success:failure:
+ */
+- (void)unlock:(DZWebDAVLock *)lock
+       success:(void(^)(void))success
+       failure:(void(^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 @end
