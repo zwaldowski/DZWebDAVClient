@@ -98,6 +98,12 @@ NSString const *DZWebDAVModificationDateKey	= @"modificationdate";
     [request setHTTPBody:[@"<?xml version=\"1.0\" encoding=\"utf-8\" ?><D:propfind xmlns:D=\"DAV:\"><D:allprop/></D:propfind>" dataUsingEncoding:NSUTF8StringEncoding]];
     [request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+		if (responseObject && ![responseObject isKindOfClass:[NSDictionary class]]) {
+            		if (failure)
+                		failure(operation, [NSError errorWithDomain:AFNetworkingErrorDomain code:NSURLErrorCannotParseResponse userInfo:nil]);
+            		return;
+	        }
+        
 		id checkItems = [responseObject valueForKeyPath:@"multistatus.response.propstat.prop"];
         id checkHrefs = [responseObject valueForKeyPath:@"multistatus.response.href"];
 		
