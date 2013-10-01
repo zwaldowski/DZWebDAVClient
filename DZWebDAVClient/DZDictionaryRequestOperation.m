@@ -48,11 +48,13 @@ static dispatch_queue_t xml_request_operation_processing_queue() {
         if ([safeOp isCancelled]) {
             return;
         }
-        
+
         dispatch_async(xml_request_operation_processing_queue(), ^(void) {
-            if (self.error) {
+            DZDictionaryRequestOperation *strongSelf = safeOp;
+
+            if (strongSelf.error) {
                 if (failure) {
-                    dispatch_async(self.failureCallbackQueue ? self.failureCallbackQueue : dispatch_get_main_queue(), ^{
+                    dispatch_async(strongSelf.failureCallbackQueue ? strongSelf.failureCallbackQueue : dispatch_get_main_queue(), ^{
                         failure(safeOp, safeOp.error);
                     });
                 }
@@ -60,17 +62,17 @@ static dispatch_queue_t xml_request_operation_processing_queue() {
                 if (success) {
                     NSDictionary *XML = safeOp.responseDictionary;
 
-                    dispatch_async(self.successCallbackQueue ? self.successCallbackQueue : dispatch_get_main_queue(), ^{
+                    dispatch_async(strongSelf.successCallbackQueue ? strongSelf.successCallbackQueue : dispatch_get_main_queue(), ^{
                         if (safeOp.parseError && failure) {
                             failure(safeOp, safeOp.parseError);
                         } else if (!safeOp.parseError && success) {
                             success(safeOp, XML);
                         }
                     });
-                } 
+                }
             }
         });
-    };    
+    };
 }
 
 + (DZDictionaryRequestOperation *)dictionaryRequestOperationWithRequest:(NSURLRequest *)urlRequest
