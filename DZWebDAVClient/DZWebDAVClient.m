@@ -199,7 +199,7 @@ NSString const *DZWebDAVModificationDateKey	= @"modificationdate";
 - (void)put:(NSData *)data path:(NSString *)remoteDestination success:(void(^)(void))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure {
     NSMutableURLRequest *request = [self requestWithMethod:@"PUT" path:remoteDestination parameters:nil];
 	[request setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:[NSString stringWithFormat:@"%d", data.length] forHTTPHeaderField:@"Content-Length"];
+	[request setValue:[NSString stringWithFormat:@"%ld", (long)data.length] forHTTPHeaderField:@"Content-Length"];
 	AFHTTPRequestOperation *operation = [self mr_operationWithRequest:request success:success failure:failure];
 	operation.inputStream = [NSInputStream inputStreamWithData:data];
     [self enqueueHTTPRequestOperation:operation];
