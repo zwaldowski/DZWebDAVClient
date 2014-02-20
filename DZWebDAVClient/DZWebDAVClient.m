@@ -9,11 +9,11 @@
 #import "NSDate+ISO8601.h"
 #import "DZWebDAVLock.h"
 
-NSString const *DZWebDAVContentTypeKey		= @"getcontenttype";
-NSString const *DZWebDAVETagKey				= @"getetag";
-NSString const *DZWebDAVCTagKey				= @"getctag";
-NSString const *DZWebDAVCreationDateKey		= @"creationdate";
-NSString const *DZWebDAVModificationDateKey	= @"modificationdate";
+NSString const *DZWebDAVContentTypeKey      = @"getcontenttype";
+NSString const *DZWebDAVETagKey             = @"getetag";
+NSString const *DZWebDAVCTagKey             = @"getctag";
+NSString const *DZWebDAVCreationDateKey     = @"creationdate";
+NSString const *DZWebDAVModificationDateKey = @"modificationdate";
 
 @interface DZWebDAVClient()
 - (void)mr_listPath:(NSString *)path depth:(NSUInteger)depth success:(void(^)(AFHTTPRequestOperation *, id))success failure:(void(^)(AFHTTPRequestOperation *, NSError *))failure;
