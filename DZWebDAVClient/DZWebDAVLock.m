@@ -43,6 +43,7 @@
         _timeout = [[[[object valueForKey: @"timeout"] componentsSeparatedByString:@"-"] lastObject] floatValue];
     if ([object valueForKey: @"locktoken"])
         _token = [[object valueForKey: @"locktoken"] copy];
+    return object;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -52,6 +53,7 @@
     new->_recursive = _recursive;
     new->_timeout = _timeout;
     new->_token = [_token copy];
+    return new;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
