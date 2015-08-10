@@ -105,11 +105,24 @@ NSString const *DZWebDAVModificationDateKey = @"modificationdate";
 	        }
         
 		id checkItems = [responseObject valueForKeyPath:@"multistatus.response.propstat.prop"];
-        id checkHrefs = [responseObject valueForKeyPath:@"multistatus.response.href"];
-		
-		NSArray *objects = [checkItems isKindOfClass:[NSArray class]] ? checkItems : @[ checkItems ],
-		*keys = [checkHrefs isKindOfClass:[NSArray class]] ? checkHrefs : @[ checkHrefs ];
-		
+		id checkHrefs = [responseObject valueForKeyPath:@"multistatus.response.href"];
+
+		NSArray *objects = nil;
+		if ([checkItems isKindOfClass:[NSArray class]]) {
+			objects = checkItems;
+		}
+		else if (checkItems) {
+			objects = @[ checkItems ];
+		}
+
+		NSArray *keys = nil;
+		if ([checkHrefs isKindOfClass:[NSArray class]]) {
+			keys = checkHrefs;
+		}
+		else if (checkHrefs) {
+			keys = @[ checkHrefs ];
+		}
+
 		NSDictionary *unformattedDict = [NSDictionary dictionaryWithObjects: objects forKeys: keys];
 		NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity: unformattedDict.count];
 		
@@ -135,9 +148,13 @@ NSString const *DZWebDAVModificationDateKey = @"modificationdate";
 			[object setObject: [unformatted objectForKey: DZWebDAVETagKey] forKey: DZWebDAVETagKey];
 			[object setObject: [unformatted objectForKey: DZWebDAVCTagKey] forKey: DZWebDAVCTagKey];
 			[object setObject: [unformatted objectForKey: DZWebDAVContentTypeKey] ?: [unformatted objectForKey: @"contenttype"] forKey: DZWebDAVContentTypeKey];
-            [object setObject: creationDate forKey: DZWebDAVCreationDateKey];
-			[object setObject: modificationDate forKey: DZWebDAVModificationDateKey];
-			
+			if (creationDate) {
+				[object setObject: creationDate forKey: DZWebDAVCreationDateKey];
+			}
+			if (modificationDate) {
+				[object setObject: modificationDate forKey: DZWebDAVModificationDateKey];
+			}
+
 			[dict setObject: object forKey: key];
 		}];
 		
